@@ -15,6 +15,15 @@ class FormController extends Controller
         session(['email' => $request->email]);
         session(['message' => $request->message]);
 
+        $rules = [
+            'name' => 'required|max:25',
+            'email' => 'required|email',
+            'message' => 'min:5'
+        ];
+
+        $this->validate($request, $rules);
+
+
         return view('/view');
     }
 }
