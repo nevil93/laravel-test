@@ -71,6 +71,8 @@
                     </ul>
                 </div>
         </form>
+
+            <a href="{{ url('/dates')  }}">Dates</a>
     </div>
 </body>
 </html>
