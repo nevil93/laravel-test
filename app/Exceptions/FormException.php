@@ -22,7 +22,8 @@ class FormException extends Exception
         parent::__construct($message, $code, $previous);
     }
 
-    public function returnErrors(){
+    public function returnErrors()
+    {
         return $this->errors;
     }
 

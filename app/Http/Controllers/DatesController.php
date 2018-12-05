@@ -16,6 +16,7 @@ class DatesController extends Controller
         $persons = array_combine($ids, $names);
 
         $personDates = [];
+
         foreach ($persons as $key => $person) {
             $messages = \DB::select('select message from messages where person_id = ?', [$key]);
             $personDates[] = ['name' => $person, 'message' => array_column($messages, 'message')];

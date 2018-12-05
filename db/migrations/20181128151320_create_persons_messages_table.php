@@ -32,6 +32,7 @@ class CreatePersonsMessagesTable extends AbstractMigration
      */
     public function change()
     {
+
         $table = $this->table('messages');
         $table->addColumn('person_id', 'integer')
               ->addColumn('message', 'string', ['limit' => 150])

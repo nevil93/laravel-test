@@ -32,6 +32,7 @@ class CreatePersonsTable extends AbstractMigration
      */
     public function change()
     {
+
         $table = $this->table('persons');
         $table->addColumn('name', 'string')
               ->addColumn('email', 'string')

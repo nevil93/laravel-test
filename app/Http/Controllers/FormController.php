@@ -28,6 +28,7 @@ class FormController extends Controller
             event(new addLogEvent([]));
         }
 
+
         $emailsDB = \DB::select('select email from persons');
 
         $emails = array_column($emailsDB, 'email');

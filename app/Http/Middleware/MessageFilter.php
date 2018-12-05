@@ -25,6 +25,7 @@ class MessageFilter
 
         $request->merge(['message' => $message]);
 
+
         return $next($request);
     }
 }

@@ -22,6 +22,7 @@ class addLogEvent
      */
     public function __construct($logMsg)
     {
+
         $this->logMsg = $logMsg;
     }
 

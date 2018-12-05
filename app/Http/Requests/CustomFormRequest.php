@@ -24,6 +24,7 @@ class CustomFormRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'name' => 'min:2',
             'email' => 'email',

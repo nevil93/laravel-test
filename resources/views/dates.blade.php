@@ -52,6 +52,7 @@
             </tr>
         </thead>
         <tbody>
+
         @foreach($personDates as $person)
             <tr>
                 <td>{{$person['name']}}</td>
