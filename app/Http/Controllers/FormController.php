@@ -33,12 +33,12 @@ class FormController extends Controller
         $emails = array_column($emailsDB, 'email');
 
         if (in_array($validate['email'], $emails)) {
-            $ids = \DB::select('select id from persons where email in (?)', [$validate['email']]);
+            $ids = \DB::select('select id from persons where email = ?', [$validate['email']]);
             $person_id = array_column($ids, 'id')[0];
             \DB::insert('insert into messages (person_id, message) values (?, ?)', [$person_id, $validate['message']]);
         } else {
             \DB::insert('insert into persons (name, email) values (?, ?)', [$validate['name'], $validate['email']]);
-            $ids = \DB::select('select id from persons where email in (?)', [$validate['email']]);
+            $ids = \DB::select('select id from persons where email = ?', [$validate['email']]);
             $person_id = array_column($ids, 'id')[0];
             \DB::insert('insert into messages (person_id, message) values (?, ?)', [$person_id, $validate['message']]);
         }
