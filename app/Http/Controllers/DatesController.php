@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ShowDatesController extends Controller
+class DatesController extends Controller
 {
     public function showDates()
     {
