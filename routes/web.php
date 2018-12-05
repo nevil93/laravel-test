@@ -15,8 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/form', function () {
-    return view('form');
-});
+Route::get('/form', ['uses' => 'FormController@view'])->name('form');
 
-Route::post('/view', ['uses' => 'FormController@formRequest']);
+Route::post('/form', ['middleware' => 'message.filter', 'uses' => 'FormController@submit']);
+
+Route::get('/dates', ['uses' => 'DatesController@showDates']);

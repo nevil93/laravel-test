@@ -80,6 +80,9 @@
         <div class="links">
             <a href="{{ url('/form')  }}">Form</a>
         </div>
+        <div class="links">
+            <a href="{{ url('/dates')  }}">Dates</a>
+        </div>
     </div>
 </div>
 </body>

@@ -1,21 +1,64 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+//use App\Exceptions\FormException;
+//use App\Services\FormService;
+//use Illuminate\Http\Request;
+use App\Http\Requests\CustomFormRequest;
+use App\Providers\addLogEvent;
+
 
 class FormController extends Controller
 {
 
+    /**
+     * @param CustomFormRequest $customFormRequest
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function submit(CustomFormRequest $customFormRequest)
+    {
+        $validate = $customFormRequest->validated();
 
-    public function formRequest(Request $request){
+        if ($validate) {
+            session(['results' => $validate]);
+            event(new addLogEvent('Dates are submited'));
+        } else {
+            event(new addLogEvent([]));
+        }
 
 
-        session(['name' => $request->name]);
-        session(['email' => $request->email]);
-        session(['message' => $request->message]);
+        $emailsDB = \DB::select('select email from persons');
 
-        return view('/view');
+        $emails = array_column($emailsDB, 'email');
+
+        if (in_array($validate['email'], $emails)) {
+            $ids = \DB::select('select id from persons where email = ?', [$validate['email']]);
+            $person_id = array_column($ids, 'id')[0];
+            \DB::insert('insert into messages (person_id, message) values (?, ?)', [$person_id, $validate['message']]);
+        } else {
+            \DB::insert('insert into persons (name, email) values (?, ?)', [$validate['name'], $validate['email']]);
+            $ids = \DB::select('select id from persons where email = ?', [$validate['email']]);
+            $person_id = array_column($ids, 'id')[0];
+            \DB::insert('insert into messages (person_id, message) values (?, ?)', [$person_id, $validate['message']]);
+        }
+
+//        $test = (array) \DB::table('persons')->latest('id')->first();
+//        $test1 = (array) \DB::table('messages')->latest('person_id')->first();
+
+        return redirect()->route('form')/*->withErrors([])*/;
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function view()
+    {
+        if (session()->has('results')) {
+            \Log::info('Reading from session');
+        }
+        return view('form');
     }
 }
 
