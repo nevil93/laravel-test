@@ -63,13 +63,6 @@
             <textarea name="message"cols="30" rows="10"></textarea><br>
 
             <button class="btn">SEND!</button>
-                <div class="result-form">
-                    <ul class="form-result">
-                        @foreach((array) session('results') as $result)
-                                <li>{{$result}}</li>
-                        @endforeach
-                    </ul>
-                </div>
         </form>
 
             <a href="{{ url('/dates')  }}">Dates</a>

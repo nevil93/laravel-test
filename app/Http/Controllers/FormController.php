@@ -22,58 +22,44 @@ class FormController extends Controller
     ) {
         $validate = $customFormRequest->validated();
 
-        if ($validate) {
-            session(['results' => $validate]);
-            event(new addLogEvent('Dates are submited'));
-        } else {
-            event(new addLogEvent([]));
-        }
+        $personsTable = $em->getRepository(Persons::class)->getPersonsTable();
 
+        $emails = array_column($personsTable, 'email');
 
         $qb = $em->createQueryBuilder();
 
-        $emails = $qb->select('e.email')
-                     ->from(Persons::class, 'e')
-                     ->getQuery()
-                     ->getResult();
-
-        if (in_array($validate['email'], array_column($emails, 'email'))) {
+        if (in_array($validate['email'], $emails)) {
             //Get person id
-            $personId = $qb->select('p1.id')
-                ->from(Persons::class, 'p1')
-                ->where('p1.email = ?1')
+            foreach ($personsTable as $person) {
+                if ($person['email'] === $validate['email']) {
+                    $id = $person['id'];
+                    // Save message
+                    $messages->setPersonId($id)->setMessage($validate['message']);
+                    $em->persist($messages);
+                    $em->flush();
+                }
+            }
+        } else {
+            //Save person
+            $persons->setName($validate['name'])->setEmail($validate['email']);
+            $em->persist($persons);
+            $em->flush();
+
+            //Get person id
+            $personId = $qb->select('p.id')
+                ->from(Persons::class, 'p')
+                ->where('p.email = ?1')
                 ->setParameter(1, $validate['email'])
                 ->getQuery()
                 ->getResult();
 
             $id = implode(array_unique(array_column($personId, 'id')));
 
-            $messages->setPersonId($id)->setMessage($validate['message']);
-            $em->persist($messages);
-            $em->flush();
-        } else {
-            //Save person in table Persons
-            $persons->setName($validate['name'])->setEmail($validate['email']);
-            $em->persist($persons);
-            $em->flush();
-
-            //Get person id
-            $personId = $qb->select('p2.id')
-                           ->from(Persons::class, 'p2')
-                           ->where('p2.email = ?1')
-                           ->setParameter(1, $validate['email'])
-                           ->getQuery()
-                           ->getResult();
-
-            $id = implode(array_unique(array_column($personId, 'id')));
-
-            //Save person message in table message
+            //Save message
             $messages->setPersonId($id)->setMessage($validate['message']);
             $em->persist($messages);
             $em->flush();
         }
-
-
 
 
 
