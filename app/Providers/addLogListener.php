@@ -29,11 +29,9 @@ class addLogListener
     public function handle(addLogEvent $event)
     {
 
-        if(is_array($event->logMsg))
-        {
+        if (is_array($event->logMsg)) {
             $this->log->error('Error', $event->logMsg);
-        } else
-        {
+        } else {
             $this->log->info($event->logMsg);
         }
     }

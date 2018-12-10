@@ -58,7 +58,7 @@
                 <td>{{$person['name']}}</td>
                 <td>
                     <table class="table2">
-                        @foreach($person['message'] as $message)
+                        @foreach(array_column($person, 'message') as $message)
                         <tr>
                             <td>{{$message}}</td>
                         </tr>
