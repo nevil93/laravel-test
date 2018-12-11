@@ -6,6 +6,9 @@
 
     <title>Dates</title>
     <style>
+        body{
+            background-color: #ddd;
+        }
         .table1{
             margin: 100px 0;
             border: 1px solid #000;

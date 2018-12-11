@@ -6,6 +6,7 @@
 
     <title>Form</title>
     <style>
+
         .alert{
             color: darkred;
             background-color: palevioletred;
@@ -31,12 +32,15 @@
             color: #000;
         }
         .form{
+            margin-top: 100px;
             width: 400px;
             text-align: center;
             margin-left: calc(50% - 200px);
             background-color: #fafafa;
             padding: 15px;
             border-radius: 10px;
+            border: 1px solid #000;
+            box-shadow: 0 0 10px 1px #081d34;
         }
         .form-result{
             list-style: none;

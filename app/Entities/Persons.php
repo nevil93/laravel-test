@@ -3,6 +3,7 @@
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,6 +34,14 @@ class Persons
      * @ORM\OneToMany(targetEntity="Messages", mappedBy="person_id")
      */
     protected $messages;
+
+    /**
+     * Persons constructor.
+     */
+    public function __construct()
+    {
+        $this->messages = new ArrayCollection;
+    }
 
     /**
      * Get id.
