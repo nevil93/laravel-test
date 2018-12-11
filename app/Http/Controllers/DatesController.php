@@ -11,7 +11,7 @@ class DatesController extends Controller
 {
     public function showDates(EntityManager $em)
     {
-        $qb = $em->createQueryBuilder();
+//        $qb = $em->createQueryBuilder();
 
         $persons = $em->getRepository(Persons::class)->getPersonsTable();
         $messages = $em->getRepository(Messages::class)->getMessagesTable();

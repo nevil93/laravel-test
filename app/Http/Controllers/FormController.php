@@ -26,7 +26,7 @@ class FormController extends Controller
 
         $emails = array_column($personsTable, 'email');
 
-        $qb = $em->createQueryBuilder();
+//        $qb = $em->createQueryBuilder();
 
         if (in_array($validate['email'], $emails)) {
             //Get person id
@@ -46,14 +46,10 @@ class FormController extends Controller
             $em->flush();
 
             //Get person id
-            $personId = $qb->select('p.id')
-                ->from(Persons::class, 'p')
-                ->where('p.email = ?1')
-                ->setParameter(1, $validate['email'])
-                ->getQuery()
-                ->getResult();
+            $userId = $em->createQuery("SELECT p.id FROM App\Entities\Persons p WHERE p.email = '{$validate['email']}'")
+                         ->getResult();
 
-            $id = implode(array_unique(array_column($personId, 'id')));
+            $id = implode(array_unique(array_column($userId, 'id')));
 
             //Save message
             $messages->setPersonId($id)->setMessage($validate['message']);

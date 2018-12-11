@@ -64,7 +64,7 @@
 
             <button class="btn">SEND!</button>
         </form>
-
+        <br>
             <a href="{{ url('/dates')  }}">Dates</a>
     </div>
 </body>
