@@ -55,17 +55,16 @@
             </tr>
         </thead>
         <tbody>
-        @foreach($personData as $person)
+        @foreach($dataList as $data)
             <tr>
-                <td>{{$person['name']}}</td>
+                <td>{{$data['name']}}</td>
                 <td>
                     <table class="table2">
-                        @foreach($person['message'] as $message)
+                        @foreach($data['message'] as $message)
                         <tr>
                             <td>{{$message}}</td>
                         </tr>
-
-                            @endforeach
+                        @endforeach
                     </table>
                     </td>
             </tr>

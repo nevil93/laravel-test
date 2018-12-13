@@ -13,33 +13,16 @@ class DataController extends Controller
     {
 
         $persons = $em->getRepository(Person::class)->findAll();
-        $personData = [];
-        foreach ($persons as $key => $person) {
-            $personData[] = ['name' => $person->getName()];
-            foreach ($person->getMessages()->getValues() as $message) {
-                $personData[$key]['message'][] = $message->getContent();
+
+        foreach ($persons as $person) {
+            $personData = ['name' => $person->getName()];
+            foreach ($person->getMessages() as $message) {
+                $personData['message'][] = $message->getContent();
             }
+            $dataList[] = $personData;
         }
-        $data['personData'] = $personData;
 
-
-//        $personsDB = \DB::select('select id, name from persons');
-//
-//        $names = array_column($personsDB, 'name');
-//        $ids = array_column($personsDB, 'id');
-//
-//        $persons = array_combine($ids, $names);
-//
-//        $personDates = [];
-//
-//        foreach ($persons as $key => $person) {
-//            $messages = \DB::select('select message from messages where person_id = ?', [$key]);
-//            $personDates[] = ['name' => $person, 'message' => array_column($messages, 'message')];
-//        }
-//
-//        $data['personDates'] = $personDates;
-
-
+        $data['dataList'] = $dataList;
 
         return view('data', $data);
     }
