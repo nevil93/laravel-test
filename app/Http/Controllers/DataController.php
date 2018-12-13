@@ -13,7 +13,7 @@ class DataController extends Controller
     {
 
         $persons = $em->getRepository(Person::class)->findAll();
-
+        $dataList = [];
         foreach ($persons as $person) {
             $personData = ['name' => $person->getName()];
             foreach ($person->getMessages() as $message) {
