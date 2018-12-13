@@ -12,17 +12,6 @@ class DataController extends Controller
     public function displayData(EntityManager $em)
     {
 
-        $persons = $em->getRepository(Person::class)->findAll();
-        $personData = [];
-        foreach ($persons as $key => $person) {
-            $personData[] = ['name' => $person->getName()];
-            foreach ($person->getMessages()->getValues() as $message) {
-                $personData[$key]['message'][] = $message->getContent();
-            }
-        }
-        $data['personData'] = $personData;
-
-
         $personsDB = \DB::select('select id, name from persons');
 
         $names = array_column($personsDB, 'name');
@@ -30,16 +19,14 @@ class DataController extends Controller
 
         $persons = array_combine($ids, $names);
 
-        $personDates = [];
+        $personData = [];
 
         foreach ($persons as $key => $person) {
             $messages = \DB::select('select message from messages where person_id = ?', [$key]);
-            $personDates[] = ['name' => $person, 'message' => array_column($messages, 'message')];
+            $personData[] = ['name' => $person, 'message' => array_column($messages, 'message')];
         }
 
-        $data['personDates'] = $personDates;
-
-
+        $data['personData'] = $personData;
 
         return view('data', $data);
     }

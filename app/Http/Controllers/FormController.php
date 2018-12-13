@@ -40,16 +40,20 @@ class FormController extends Controller
         $emails = array_column($emailsDB, 'email');
 
         if (in_array($validate['email'], $emails)) {
-            $ids = \DB::select('select id from persons where email = ?', [$validate['email']]);
-            $person_id = array_column($ids, 'id')[0];
-            \DB::insert('insert into messages (person_id, message) values (?, ?)', [$person_id, $validate['message']]);
+            $selectPerson = \DB::select('select id, name from persons where email = ?', [$validate['email']]);
+            $personName = array_column($selectPerson, 'name')[0];
+            $personId = array_column($selectPerson, 'id')[0];
+            if ($personName !== $validate['name']) {
+                \DB::update('update persons set name = ? where id = ?', [$validate['name'], $personId]);
+            }
+            \DB::insert('insert into messages (person_id, message) values (?, ?)', [$personId, $validate['message']]);
         } else {
             \DB::insert('insert into persons (name, email) values (?, ?)', [$validate['name'], $validate['email']]);
             $ids = \DB::select('select id from persons where email = ?', [$validate['email']]);
-            $person_id = array_column($ids, 'id')[0];
-            \DB::insert('insert into messages (person_id, message) values (?, ?)', [$person_id, $validate['message']]);
+            $personId = array_column($ids, 'id')[0];
+            \DB::insert('insert into messages (person_id, message) values (?, ?)', [$personId, $validate['message']]);
         }
-//
+
 ////        $test = (array) \DB::table('persons')->latest('id')->first();
 ////        $test1 = (array) \DB::table('messages')->latest('person_id')->first();
 
