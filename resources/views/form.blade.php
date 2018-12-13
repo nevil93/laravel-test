@@ -6,6 +6,7 @@
 
     <title>Form</title>
     <style>
+
         .alert{
             color: darkred;
             background-color: palevioletred;
@@ -22,7 +23,17 @@
             background-color: green;
             border-radius: 5px;
             color: #fff;
-            transition: .5s;
+            transition: .5s;$data = [];
+        if (session()->has('id')) {
+            $user = $em->find(Person::class, session('id'));
+            $message = $em->getRepository(Message::class)->findOneBy(['id' => session('msgId')]);
+            $data['personData'] = [
+                $message->getPerson()->getName(),
+                $message->getPerson()->getEmail(),
+                $message->getContent()
+            ];
+        }
+        return view('form', $data);
             cursor: pointer;
             outline: none;
         }
@@ -31,12 +42,15 @@
             color: #000;
         }
         .form{
+            margin-top: 100px;
             width: 400px;
             text-align: center;
             margin-left: calc(50% - 200px);
             background-color: #fafafa;
             padding: 15px;
             border-radius: 10px;
+            border: 1px solid #000;
+            box-shadow: 0 0 10px 1px #081d34;
         }
         .form-result{
             list-style: none;
@@ -63,16 +77,18 @@
             <textarea name="message"cols="30" rows="10"></textarea><br>
 
             <button class="btn">SEND!</button>
-                <div class="result-form">
-                    <ul class="form-result">
-                        @foreach((array) session('results') as $result)
-                                <li>{{$result}}</li>
+            <div>
+                <ul class="form-result">
+                    @if(isset($personData))
+                        @foreach($personData as $data)
+                            <li>{{$data}}</li>
                         @endforeach
-                    </ul>
-                </div>
+                    @endif
+                </ul>
+            </div>
         </form>
-
-            <a href="{{ url('/dates')  }}">Dates</a>
+        <br>
+            <a href="{{ url('/data')  }}">Data</a>
     </div>
 </body>
 </html>

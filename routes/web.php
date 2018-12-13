@@ -18,3 +18,5 @@ Route::get('/', function () {
 Route::get('/form', ['uses' => 'FormController@view'])->name('form');
 
 Route::post('/form', ['middleware' => 'message.filter', 'uses' => 'FormController@submit']);
+
+Route::get('/data', ['uses' => 'DataController@displayData']);
