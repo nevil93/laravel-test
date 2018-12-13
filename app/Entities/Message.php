@@ -6,10 +6,10 @@ namespace App\Entities;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Entities\Repositories\MessagesRepository")
+ * @ORM\Entity(repositoryClass="App\Entities\Repositories\MessageRepository")
  * @ORM\Table(name="messages")
  */
-class Messages
+class Message
 {
     /**
      * @ORM\Id
@@ -19,16 +19,15 @@ class Messages
     protected $id;
 
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="Persons", inversedBy="messages")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="messages")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
-    protected $person_id;
+    protected $person;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=150, name="message")
      */
-    protected $message;
+    protected $content;
 
     /**
      * Get id.
@@ -41,33 +40,31 @@ class Messages
     }
 
     /**
-     * @param $personId
+     * @param Person $person
      * @return $this
      */
-    public function setPersonId($personId)
+    public function setPerson(Person $person)
     {
-        $this->person_id = $personId;
+        $this->person = $person;
 
         return $this;
     }
 
     /**
-     * Get personId.
-     *
-     * @return int
+     * @return mixed
      */
-    public function getPersonId()
+    public function getPerson()
     {
-        return $this->person_id;
+        return $this->person;
     }
 
     /**
-     * @param $message
+     * @param $content
      * @return $this
      */
-    public function setMessage($message)
+    public function setContent($content)
     {
-        $this->message = $message;
+        $this->content = $content;
 
         return $this;
     }
@@ -77,8 +74,8 @@ class Messages
      *
      * @return string
      */
-    public function getMessage()
+    public function getContent()
     {
-        return $this->message;
+        return $this->content;
     }
 }

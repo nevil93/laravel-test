@@ -55,13 +55,12 @@
             </tr>
         </thead>
         <tbody>
-
-        @foreach($personDates as $person)
+        @foreach($personData as $person)
             <tr>
                 <td>{{$person['name']}}</td>
                 <td>
                     <table class="table2">
-                        @foreach(array_column($person, 'message') as $message)
+                        @foreach($person['message'] as $message)
                         <tr>
                             <td>{{$message}}</td>
                         </tr>

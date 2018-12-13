@@ -9,54 +9,53 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CustomFormRequest;
 use App\Providers\addLogEvent;
 use Doctrine\ORM\EntityManager;
-use App\Entities\Persons;
-use App\Entities\Messages;
+use App\Entities\Person;
+use App\Entities\Message;
 
 class FormController extends Controller
 {
+
+    protected $em;
+
+    public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
     public function submit(
         CustomFormRequest $customFormRequest,
-        EntityManager $em,
-        Persons $persons,
-        Messages $messages
+        Person $person,
+        Message $message
     ) {
+        session()->forget('id');
+
         $validate = $customFormRequest->validated();
 
-        $personsTable = $em->getRepository(Persons::class)->getPersonsTable();
 
-        $emails = array_column($personsTable, 'email');
-
-//        $qb = $em->createQueryBuilder();
+        $emails = array_column($this->em->getRepository(Person::class)->getPersonFromTable(), 'email');
 
         if (in_array($validate['email'], $emails)) {
-            //Get person id
-            foreach ($personsTable as $person) {
-                if ($person['email'] === $validate['email']) {
-                    $id = $person['id'];
-                    // Save message
-                    $messages->setPersonId($id)->setMessage($validate['message']);
-                    $em->persist($messages);
-                    $em->flush();
-                }
-            }
+            // Add message to person if he exist
+            $user = $this->em->getRepository(Person::class)->findOneBy(['email' => $validate['email']]);
+            session(['id' => $user->getId()]);
+            $message->setPerson($user)->setContent($validate['message']);
+            $person->addMessage($message);
+            $this->em->persist($message);
+            $this->em->flush();
+            session(['msgId' => $message->getId()]);
         } else {
-            //Save person
-            $persons->setName($validate['name'])->setEmail($validate['email']);
-            $em->persist($persons);
-            $em->flush();
-
-            //Get person id
-            $userId = $em->createQuery("SELECT p.id FROM App\Entities\Persons p WHERE p.email = '{$validate['email']}'")
-                         ->getResult();
-
-            $id = implode(array_unique(array_column($userId, 'id')));
-
-            //Save message
-            $messages->setPersonId($id)->setMessage($validate['message']);
-            $em->persist($messages);
-            $em->flush();
+            // Add person and message
+            $person->setName($validate['name'])->setEmail($validate['email']);
+            $this->em->persist($person);
+            $this->em->flush();
+            $user = $this->em->getRepository(Person::class)->findOneBy(['email' => $validate['email']]);
+            session(['id' => $user->getId()]);
+            $message->setPerson($person)->setContent($validate['message']);
+            $person->addMessage($message);
+            $this->em->persist($message);
+            $this->em->flush();
+            session(['msgId' => $message->getId()]);
         }
-
 
 
 //        $emailsDB = \DB::select('select email from persons');
@@ -77,18 +76,27 @@ class FormController extends Controller
 ////        $test = (array) \DB::table('persons')->latest('id')->first();
 ////        $test1 = (array) \DB::table('messages')->latest('person_id')->first();
 
-        return redirect()->route('form')/*->withErrors([])*/;
+        return redirect()->route('form');
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+
     public function view()
     {
-        if (session()->has('results')) {
-            \Log::info('Reading from session');
+        $data = [];
+        if (session()->has('id')) {
+            $this->em->find(Person::class, session('id'));
+            $message = $this->em->getRepository(Message::class)->findOneBy(['id' => session('msgId')]);
+            if (isset($message)) {
+                $data['personData'] = [
+                    'name' => $message->getPerson()->getName(),
+                    'email' => $message->getPerson()->getEmail(),
+                    'message' => $message->getContent()
+                ];
+            }
+
         }
-        return view('form');
+
+        return view('form', $data);
     }
 }
 

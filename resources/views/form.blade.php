@@ -23,7 +23,17 @@
             background-color: green;
             border-radius: 5px;
             color: #fff;
-            transition: .5s;
+            transition: .5s;$data = [];
+        if (session()->has('id')) {
+            $user = $em->find(Person::class, session('id'));
+            $message = $em->getRepository(Message::class)->findOneBy(['id' => session('msgId')]);
+            $data['personData'] = [
+                $message->getPerson()->getName(),
+                $message->getPerson()->getEmail(),
+                $message->getContent()
+            ];
+        }
+        return view('form', $data);
             cursor: pointer;
             outline: none;
         }
@@ -67,9 +77,18 @@
             <textarea name="message"cols="30" rows="10"></textarea><br>
 
             <button class="btn">SEND!</button>
+            <div>
+                <ul class="form-result">
+                    @if(isset($personData))
+                        @foreach($personData as $data)
+                            <li>{{$data}}</li>
+                        @endforeach
+                    @endif
+                </ul>
+            </div>
         </form>
         <br>
-            <a href="{{ url('/dates')  }}">Dates</a>
+            <a href="{{ url('/data')  }}">Data</a>
     </div>
 </body>
 </html>

@@ -7,17 +7,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Entities\Repositories\PersonsRepository")
+ * @ORM\Entity(repositoryClass="App\Entities\Repositories\PersonRepository")
  * @ORM\Table(name="persons")
  */
-class Persons
+class Person
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
-
     protected $id;
 
     /**
@@ -31,7 +30,7 @@ class Persons
     protected $email;
 
     /**
-     * @ORM\OneToMany(targetEntity="Messages", mappedBy="person_id")
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="person")
      */
     protected $messages;
 
@@ -93,5 +92,30 @@ class Persons
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @param Message $message
+     */
+    public function addMessage(Message $message)
+    {
+        $this->messages[] = $message;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
+
+    /**
+     * @param Message $message
+     */
+    public function removeMessage(Message $message)
+    {
+        $this->messages->removeElement($message);
     }
 }
