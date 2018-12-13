@@ -77,13 +77,11 @@
             <textarea name="message"cols="30" rows="10"></textarea><br>
 
             <button class="btn">SEND!</button>
-            <div>
+            <div class="result-form">
                 <ul class="form-result">
-                    @if(isset($personData))
-                        @foreach($personData as $data)
-                            <li>{{$data}}</li>
-                        @endforeach
-                    @endif
+                    @foreach((array) session('results') as $result)
+                        <li>{{$result}}</li>
+                    @endforeach
                 </ul>
             </div>
         </form>
