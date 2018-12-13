@@ -38,6 +38,9 @@ class FormController extends Controller
             // Add message to person if he exist
             $user = $this->em->getRepository(Person::class)->findOneBy(['email' => $validate['email']]);
             session(['id' => $user->getId()]);
+            if ($user->getName() !== $validate['name']) {
+                $user->setName($validate['name']);
+            }
             $message->setPerson($user)->setContent($validate['message']);
             $person->addMessage($message);
             $this->em->persist($message);
