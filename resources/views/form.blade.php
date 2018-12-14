@@ -23,17 +23,7 @@
             background-color: green;
             border-radius: 5px;
             color: #fff;
-            transition: .5s;$data = [];
-        if (session()->has('id')) {
-            $user = $em->find(Person::class, session('id'));
-            $message = $em->getRepository(Message::class)->findOneBy(['id' => session('msgId')]);
-            $data['personData'] = [
-                $message->getPerson()->getName(),
-                $message->getPerson()->getEmail(),
-                $message->getContent()
-            ];
-        }
-        return view('form', $data);
+            transition: .5s;
             cursor: pointer;
             outline: none;
         }
