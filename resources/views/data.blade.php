@@ -95,5 +95,6 @@
         </table>
     @endif
     <a href="{{ url('/form')  }}" class="btn">Go To Form</a>
+    <script type="text/javascript" src="{{ asset('js/form.js') }}"></script>
 </body>
 </html>
