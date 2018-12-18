@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Services\Streamline;
+use App\Services\FromObjectToArrayService;
 use Psy\Util\Str;
 
-class StreamlineServiceProvider extends ServiceProvider
+class FromObjectToArrayServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
@@ -25,8 +25,8 @@ class StreamlineServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(Streamline::class, function () {
-            return new Streamline();
+        $this->app->singleton(FromObjectToArrayService::class, function () {
+            return new FromObjectToArrayService();
         });
     }
 }

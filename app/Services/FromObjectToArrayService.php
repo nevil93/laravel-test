@@ -6,8 +6,12 @@ namespace App\Services;
 use App\Entities\Person;
 
 
-class Streamline
+class FromObjectToArrayService
 {
+    /**
+     * @param Person $person
+     * @return array
+     */
     public function convertToArray(Person $person)
     {
         $data = [
@@ -17,10 +21,8 @@ class Streamline
             ];
 
         foreach ($person->getMessages() as $message) {
-            $data['messages'][] = $message->getContent();
+            $data['messages'][$message->getId()] = $message->getContent();
         }
         return $data;
     }
-
-
 }
