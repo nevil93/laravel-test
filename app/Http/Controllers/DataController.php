@@ -6,18 +6,28 @@ use Illuminate\Http\Request;
 use Doctrine\ORM\EntityManager;
 //use App\Entities\Person;
 use App\Entities\Message;
-use App\Services\Streamline;
 
 class DataController extends Controller
 {
+    /**
+     * @var EntityManager
+     */
     protected $entityManager;
 
+    /**
+     * DataController constructor.
+     * @param EntityManager $entityManager
+     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    public function search(Request $request, Streamline $streamline)
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function search(Request $request)
     {
         $searchResult = $this->entityManager->getRepository(Message::class)->searchFiltering($request->get('search'));
 
@@ -27,7 +37,9 @@ class DataController extends Controller
             foreach ($result->getMessages() as $message) {
                 $personData['message'][] = $message->getContent();
             }
+
             $dataList[] = $personData;
+
         }
 
         return redirect()->route('data')->with('result', $dataList);

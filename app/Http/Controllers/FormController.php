@@ -20,11 +20,23 @@ class FormController extends Controller
      */
     protected $entityManager;
 
+    /**
+     * FormController constructor.
+     * @param EntityManager $entityManager
+     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param CustomFormRequest $customFormRequest
+     * @param Person $person
+     * @param Message $message
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function submit(
         CustomFormRequest $customFormRequest,
         Person $person,
@@ -66,7 +78,9 @@ class FormController extends Controller
         return redirect()->route('form');
     }
 
-
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function view()
     {
         $data = [];
