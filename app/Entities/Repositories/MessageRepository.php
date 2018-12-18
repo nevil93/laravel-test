@@ -4,26 +4,23 @@ namespace App\Entities\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use App\Entities\Person;
-use App\Entities\Message;
 
 class MessageRepository extends EntityRepository
 {
-
+    /**
+     * @param $searchRequest
+     * @return mixed
+     */
     public function searchFiltering($searchRequest)
     {
         $queryBuilder = $this->_em->createQueryBuilder();
 
 
-
+        $personTable = $queryBuilder->select('p')->from(Person::class, 'p');
         if (empty($searchRequest)) {
-            $result = $queryBuilder->select('p')
-                                    ->from(Person::class, 'p')
-                                    ->getQuery()
-                                    ->getResult();
+            $result = $personTable->getQuery()->getResult();
         } else {
-            $result = $queryBuilder->select('p')
-                                   ->from(Person::class, 'p')
-                                   ->join(Message::class, 'm', 'WITH', 'p.id = m.person')
+            $result = $personTable->leftJoin('p.messages', 'm')
                                    ->where($queryBuilder->expr()->orX(
                                        $queryBuilder->expr()->like('p.name', '?1'),
                                        $queryBuilder->expr()->like('m.content', '?2')
