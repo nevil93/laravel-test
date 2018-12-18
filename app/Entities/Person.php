@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Entities\Repositories\PersonRepository")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="persons")
  */
 class Person
@@ -34,6 +35,11 @@ class Person
      * @ORM\OneToMany(targetEntity="Message", mappedBy="person")
      */
     protected $messages;
+
+    /**
+     * @ORM\Column(type="datetime", name="updated_at")
+     */
+    protected $updatedAt;
 
     /**
      * Persons constructor.
@@ -118,5 +124,13 @@ class Person
     public function removeMessage(Message $message)
     {
         $this->messages->removeElement($message);
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime('now');
     }
 }

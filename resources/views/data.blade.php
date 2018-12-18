@@ -64,8 +64,9 @@
 <body style="text-align: center;">
     <form action="" class="form" method="POST">
         <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
-        <input type="text" name="search">
+        <input type="text" name="search" id="search">
         <button class="btn">Search</button>
+        <a href="#" id="refresh" class="btn" style="display: inline; margin-left: 0;">Refresh</a>
     </form>
     @if(session('result'))
         <strong style="text-align: center; display: block; margin-top: 20px; font-size: 20px">Data from DB</strong>
