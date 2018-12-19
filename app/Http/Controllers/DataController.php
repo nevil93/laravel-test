@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Doctrine\ORM\EntityManager;
-//use App\Entities\Person;
-use App\Entities\Message;
+use App\Entities\Person;
+//use App\Entities\Message;
 
 class DataController extends Controller
 {
@@ -29,7 +29,7 @@ class DataController extends Controller
      */
     public function search(Request $request)
     {
-        $searchResult = $this->entityManager->getRepository(Message::class)->searchFiltering($request->get('search'));
+        $searchResult = $this->entityManager->getRepository(Person::class)->searchFiltering($request->get('search'));
 
         $dataList = [];
         foreach ($searchResult as $result) {
