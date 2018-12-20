@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Doctrine\ORM\EntityManager;
 use App\Entities\Person;
 //use App\Entities\Message;
+use App\Services\FromObjectToArrayService;
 
 class DataController extends Controller
 {
@@ -23,25 +24,30 @@ class DataController extends Controller
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function search(Request $request)
+
+    public function search()
+    {
+//        $searchResult = $this->entityManager->getRepository(Person::class)->searchFiltering($request->get('search'));
+//        $dataList = [];
+//        foreach ($searchResult as $result) {
+//            $personData = ['name' => $result->getName()];
+//            foreach ($result->getMessages() as $message) {
+//                $personData['message'][] = $message->getContent();
+//            }
+//            $dataList[] = $personData;
+//        }
+//        return redirect()->route('data')->with('result', $dataList);
+        return view('data');
+    }
+
+    public function jsonResponse(Request $request, FromObjectToArrayService $converter)
     {
         $searchResult = $this->entityManager->getRepository(Person::class)->searchFiltering($request->get('search'));
 
-        $dataList = [];
-        foreach ($searchResult as $result) {
-            $personData = ['name' => $result->getName()];
-            foreach ($result->getMessages() as $message) {
-                $personData['message'][] = $message->getContent();
-            }
+        $data = $converter->convertToArray($searchResult);
 
-            $dataList[] = $personData;
 
-        }
 
-        return redirect()->route('data')->with('result', $dataList);
+        return response()->json($data);
     }
 }
