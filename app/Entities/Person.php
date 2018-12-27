@@ -4,10 +4,12 @@
 namespace App\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Entities\Repositories\PersonRepository")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="persons")
  */
 class Person
@@ -33,6 +35,11 @@ class Person
      * @ORM\OneToMany(targetEntity="Message", mappedBy="person")
      */
     protected $messages;
+
+    /**
+     * @ORM\Column(type="datetime", name="updated_at")
+     */
+    protected $updatedAt;
 
     /**
      * Persons constructor.
@@ -103,7 +110,7 @@ class Person
     }
 
     /**
-     * @return mixed
+     * @return Collection|Message[]
      */
     public function getMessages()
     {
@@ -117,5 +124,13 @@ class Person
     public function removeMessage(Message $message)
     {
         $this->messages->removeElement($message);
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime('now');
     }
 }

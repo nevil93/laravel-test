@@ -176,6 +176,8 @@ return [
         App\Providers\FormServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+        // Streamline Service Provider
+        App\Providers\FromObjectToArrayServiceProvider::class,
     ],
 
     /*

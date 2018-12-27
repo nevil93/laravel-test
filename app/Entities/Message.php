@@ -6,7 +6,8 @@ namespace App\Entities;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Entities\Repositories\MessageRepository")
+ * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="messages")
  */
 class Message
@@ -28,6 +29,11 @@ class Message
      * @ORM\Column(type="string", length=150, name="message")
      */
     protected $content;
+
+    /**
+     * @ORM\Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
 
     /**
      * Get id.
@@ -77,5 +83,13 @@ class Message
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime('now');
     }
 }

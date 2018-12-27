@@ -5,25 +5,43 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Doctrine\ORM\EntityManager;
 use App\Entities\Person;
-use App\Entities\Message;
+//use App\Entities\Message;
 
 class DataController extends Controller
 {
-    public function displayData(EntityManager $em)
-    {
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
 
-        $persons = $em->getRepository(Person::class)->findAll();
+    /**
+     * DataController constructor.
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function search(Request $request)
+    {
+        $searchResult = $this->entityManager->getRepository(Person::class)->searchFiltering($request->get('search'));
+
         $dataList = [];
-        foreach ($persons as $person) {
-            $personData = ['name' => $person->getName()];
-            foreach ($person->getMessages() as $message) {
+        foreach ($searchResult as $result) {
+            $personData = ['name' => $result->getName()];
+            foreach ($result->getMessages() as $message) {
                 $personData['message'][] = $message->getContent();
             }
+
             $dataList[] = $personData;
+
         }
 
-        $data['dataList'] = $dataList;
-
-        return view('data', $data);
+        return redirect()->route('data')->with('result', $dataList);
     }
 }
