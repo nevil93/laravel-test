@@ -73,7 +73,6 @@
 <body style="text-align: center;">
     <form action="" class="form" method="GET">
         <input type="text" name="search" id="search">
-        {{--<button class="btn">Search</button>--}}
         <a href="#" id="refresh" class="btn" style="display: inline; margin-left: 0;">Refresh</a>
     </form>
     <div class="container-fluid">
