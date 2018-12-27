@@ -22,13 +22,13 @@ class PersonRepository extends EntityRepository
             $result = $personTable->getQuery()->getResult();
         } else {
             $result = $personTable->leftJoin('p.messages', 'm')
-                ->where($queryBuilder->expr()->orX(
-                    $queryBuilder->expr()->like('p.name', '?1'),
-                    $queryBuilder->expr()->like('m.content', '?2')
-                ))
-                ->setParameters([1 => '%'.$searchRequest.'%', 2 => '%'.$searchRequest.'%'])
-                ->getQuery()
-                ->getResult();
+                                  ->where($queryBuilder->expr()->orX(
+                                      $queryBuilder->expr()->like('p.name', '?1'),
+                                      $queryBuilder->expr()->like('m.content', '?2')
+                                  ))
+                                  ->setParameters([1 => '%'.$searchRequest.'%', 2 => '%'.$searchRequest.'%'])
+                                  ->getQuery()
+                                  ->getResult();
         }
 
         return $result;
