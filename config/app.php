@@ -177,7 +177,7 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
         // Streamline Service Provider
-        App\Providers\FromObjectToArrayServiceProvider::class,
+        App\Providers\PersonSerializerServiceProvider::class,
     ],
 
     /*

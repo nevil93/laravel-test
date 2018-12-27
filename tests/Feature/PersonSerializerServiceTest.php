@@ -7,14 +7,14 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Entities\Person;
 use App\Entities\Message;
-use App\Services\FromObjectToArrayService;
+use App\Services\PersonSerializerService;
 use Faker\Factory as Faker;
 
-class FromObjectToArrayServiceTest extends TestCase
+class PersonSerializerServiceTest extends TestCase
 {
     public function testIsCorrectArrayWhatIsReturned()
     {
-        $converter = new FromObjectToArrayService();
+        $converter = new PersonSerializerService();
         $person = new Person();
         $message = new Message();
         $reflectionPersonClass = new \ReflectionClass($person);
@@ -52,7 +52,7 @@ class FromObjectToArrayServiceTest extends TestCase
 
     public function testIsCorrectArrayWhatIsReturnedWithNullValues()
     {
-        $converter = new FromObjectToArrayService();
+        $converter = new PersonSerializerService();
         $person = new Person();
 
         $arr = [

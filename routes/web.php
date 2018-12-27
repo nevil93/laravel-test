@@ -19,8 +19,6 @@ Route::get('/form', ['uses' => 'FormController@view'])->name('form');
 
 Route::post('/form', ['middleware' => 'message.filter', 'uses' => 'FormController@submit']);
 
-Route::get('/data', function () {
-    return view('data');
-})->name('data');
+Route::get('/data', ['uses' => 'DataController@search']);
 
-Route::post('/data', ['uses' => 'DataController@search']);
+Route::get('/data/get', ['uses' => 'DataController@response']);
